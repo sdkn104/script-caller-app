@@ -4,7 +4,7 @@
       <h1>Script Caller</h1>
       <p>
         This extension provides a customizable icon  and menu in Chrome toolbar 
-        to run user scripts at browser and/or local PC.
+        to run user scripts at browser and/or at local PC.
       </p>
       <p>
         This extension requires <b>native client</b> to be installed in local Windows PC.
@@ -45,7 +45,7 @@
             </tr>
             <tr>
               <td>menu[].matches</td>
-              <td>An array of URL prefix match strings. The menu item is shown if one of the string matches the URL of active page.</td>
+              <td>(optional) An array of URL prefix match strings. The menu item is shown if one of the string matches the URL of active page.</td>
             </tr>
           </table>
         </li>
@@ -65,13 +65,23 @@
             </tr>
             <tr>
               <td>customize/nagtiveCode_{menu_id}.js</td>
-              <td>javascript code that is executed by Node.js in local PC after executing the injection code.
+              <td>(optional) javascript code that is executed by Node.js in local PC after executing the injection code.
                   In the code, <code>function main(argument)</code> must be defined.
               </td>
             </tr>
           </table>
         </li>
       </ul>
+
+      <h2>Update Setup</h2>
+      After modificaion of the above <code>customize/*</code> files, 
+      click the following button to refresh setup.
+      <br>
+      <input id="setup" type="button" value="Update Setup">
+  
+
+      <h2>Debug</h2>
+
 
       <h2>Links</h2>
       <ul>

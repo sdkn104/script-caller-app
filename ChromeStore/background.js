@@ -4,10 +4,25 @@
 // import common parameters
 import {appName, storageKey} from "./common.js"
 
-// on install, setup browser action icon
-chrome.runtime.onInstalled.addListener(details => {
+// on install, setup browser action icon and menu
+chrome.runtime.onInstalled.addListener(setupAll);
+
+// on startup of browser, setup browser action icon
+chrome.runtime.onStartup.addListener(createBrowserActionIcon);
+
+// on click of setup botton in option page, setup browser action icon and menu
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    if( message.cmd == "setup" ) {
+        setupAll(null)
+    }
+});
+
+
+// setup browser action icon and menu
+function setupAll(details) {
     // send message to native host to get browser icon and injection codes
     let message  = { cmd: "get-options" }
+    console.log("---- setup all ----")
     console.log("request to native host:")
     console.log(message)
     chrome.runtime.sendNativeMessage(appName, message, response => {
@@ -36,16 +51,14 @@ chrome.runtime.onInstalled.addListener(details => {
             });
         }
     });
-});
+}
 
-// on startup, setup browser action icon
-chrome.runtime.onStartup.addListener(createBrowserActionIcon);
 
 // setup browser action icon
 function createBrowserActionIcon() {
     // load icon/menu info from storage
     chrome.storage.local.get(storageKey, function(data){        
-        console.log("setup browser action")
+        console.log("setup browser action icon")
         // set title
         let title = data[storageKey].browserAction.title;
         chrome.browserAction.setTitle({title:title})
@@ -72,10 +85,12 @@ function createBrowserActionIcon() {
 // on click of browser action menu item
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if( message.cmd == "click" ) {
+        // read local storage
+        console.info("---- menu item clicked ----")
         chrome.storage.local.get(storageKey, function(storageData){
             // execute injection code
             let code = storageData[storageKey].injectionCode[message.id]
-            console.info("injection code:")
+            console.info("injection code to be executed:")
             console.info(code)
             chrome.tabs.executeScript({code:code}, function(injectionCodeResults){
                 // send message to native host to execute native code

@@ -4,18 +4,19 @@
 // load common parameters
 import {appName, storageKey} from "./common.js"
 
-// get url of current tab
-chrome.tabs.executeScript({
-    code: 'location.href'
-}, 
-function(results){
-    let url = results[0]
-    let content = document.getElementById("content")
-
-    chrome.storage.local.get(storageKey, function(data){        
-        // draw title
-        let title = data[storageKey].browserAction.title;
-        document.getElementById("title").innerText = title;
+// load data from local storage
+chrome.storage.local.get(storageKey, function(data){        
+    // draw title
+    let title = data[storageKey].browserAction.title;
+    document.getElementById("title").innerText = title;
+    // get url of current tab
+    chrome.tabs.executeScript({ // ! this generates error if the page is "chrome://*", etc.
+        code: 'location.href'
+    }, 
+    function(results){
+        //alert(9999)
+        let url = results[0]
+        let content = document.getElementById("content")
         // draw menu items
         let menu = data[storageKey].browserAction.menu;
         menu.forEach(function(m) {
@@ -34,5 +35,5 @@ function(results){
                 content.appendChild(inp)    
             }
         });
-    });    
+    });
 });
