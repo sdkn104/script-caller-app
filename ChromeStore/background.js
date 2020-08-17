@@ -89,18 +89,22 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         console.info("---- menu item clicked ----")
         chrome.storage.local.get(storageKey, function(storageData){
             // execute injection code
-            let code = storageData[storageKey].injectionCode[message.id]
+            let code = storageData[storageKey].injectionCode[message.idx]
             console.info("injection code to be executed:")
             console.info(code)
+            if( !code ) { code = "" }
             chrome.tabs.executeScript({code:code}, function(injectionCodeResults){
                 // send message to native host to execute native code
-                let msg = {cmd:"click", id:message.id, injectionCodeResults:injectionCodeResults}
-                console.info("request to native host:")
-                console.info(msg)
-                chrome.runtime.sendNativeMessage(appName, msg, response => {
-                    console.info("response:");
-                    console.info(response);
-                });
+                let nativeScript = storageData[storageKey].browserAction.menu[message.idx].nativeScript
+                if( nativeScript ){
+                    let msg = {cmd:"click", idx:message.idx, injectionCodeResults:injectionCodeResults}
+                    console.info("request to native host:")
+                    console.info(msg)
+                    chrome.runtime.sendNativeMessage(appName, msg, response => {
+                        console.info("response:");
+                        console.info(response);
+                    });    
+                }
             });
         });    
     }

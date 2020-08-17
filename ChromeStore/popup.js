@@ -19,16 +19,16 @@ chrome.storage.local.get(storageKey, function(data){
         let content = document.getElementById("content")
         // draw menu items
         let menu = data[storageKey].browserAction.menu;
-        menu.forEach(function(m) {
+        menu.forEach(function(m, idx) {
             if( !("matches" in m) || m.matches.some((p) => url.startsWith(p)) ) {
                 // add a button on popup menu
                 let inp = document.createElement("input")
                 inp.type = "button"
                 inp.value = m.title;
-                inp.name = m.id;
+                inp.name = idx;
                 inp.onclick = function(evt){
-                    let id = evt.target.name;
-                    let message = {cmd:"click", id:id}
+                    let i = evt.target.name;
+                    let message = {cmd:"click", idx:i}
                     chrome.runtime.sendMessage(message);
                     window.close();
                 }
