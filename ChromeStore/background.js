@@ -92,7 +92,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             let code = storageData[storageKey].injectionCode[message.idx]
             console.info("injection code to be executed:")
             console.info(code)
-            if( !code ) { code = "" }
+            if( code === undefined ) { code = "" }
             chrome.tabs.executeScript({code:code}, function(injectionCodeResults){
                 // send message to native host to execute native code
                 let nativeScript = storageData[storageKey].browserAction.menu[message.idx].nativeScript

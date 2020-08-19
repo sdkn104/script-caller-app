@@ -7,20 +7,20 @@
         to run user scripts at browser and/or at local PC.
       </p>
       <p>
-        This extension requires <b>native client</b> to be installed in local Windows PC.
+        This extension requires <b>native client</b> that is installed in local Windows PC.
         (see <a id="install_page1" target="_blank">here</a>)
       </p>
 
       <h2>How to setup menu and user scripts</h2>
-      Menu specification and script files should be stored 
-      in native client "host" folder in local PC as follows.
+      Menu specification file and script files should be stored 
+      in <a id="install_page2" target="_blank">native client</a> "host" folder in local PC as follows.
       <ul>
         <li>
           Write specification of icon and menu in <code>customize/browserAction.json</code> file 
           in native client "host" folder.
           <table border=1>
             <tr>
-              <th>key</th>
+              <th>JSON key</th>
               <th>value</th>
             </tr>
             <tr>
@@ -41,20 +41,22 @@
             </tr>
             <tr>
               <td>menu[].matches</td>
-              <td>(optional) An array of URL prefix match strings. The menu item is shown if one of the string matches the URL of active page.</td>
+              <td>(optional) An array of URL prefix match strings. 
+                The menu item is shown only if one of the string matches the URL of active page.</td>
             </tr>
             <tr>
               <td>menu[].injectionScript</td>
               <td>(optional) Injection script file name. 
-                  This file must be stored in <code>./customize</code> folder in "host" folder.
-                  <br>This file contains javascript code that is injected to the active page on clicking the menu item.
-                  The return values are passed to the native script as arguments.
+                  This file must be stored in <code>./customize</code> folder in the "host" folder.
+                  <br>This file contains javascript code that is injected to the active page in the current tab 
+                  when the menu item is clicked.
+                  The returned values from this script are passed to the native script as arguments of <code>main</code> function.
               </td>
             </tr>
             <tr>
               <td>menu[].nativeScript</td>
               <td>(optional) Native script file name. 
-                This file must be stored in <code>./customize</code> folder in "host" folder.
+                This file must be stored in <code>./customize</code> folder in the "host" folder.
                 <br>This file contains javascript code that is executed by Node.js in local PC after executing the injection code.
                 In the code, <code>function main(argument)</code> must be defined.
               </td>
@@ -62,9 +64,8 @@
           </table>
         </li>
         <br>
-        <li>Write injection script and/or native script for each menu item.
-            See example script files in the native client "host" folder.
-        </li>
+        <li>Write injection script and/or native script files for each menu item.</li>
+        <li>See example JSON file and script files in the native client "host" folder.</li>
       </ul>
 
       <h2>Update Setup</h2>
@@ -75,11 +76,15 @@
   
 
       <h2>Debug</h2>
-
+      To open the Chrome DevTools panel for the background script,
+      select the blue link of "background.html" next to Inspect views
+      in the Chrome extension management page.
+      Open Console tab to see log from this extension.
+      see <a href="https://developer.chrome.com/apps/tut_debugging">here.</a>
 
       <h2>Links</h2>
       <ul>
-        <li><a id="install_page2" target="_blank">Installation Instruction</a></li>
+        <li><a id="install_page3" target="_blank">Installation Instruction</a></li>
         <li><a id="store_page" target="_blank">Chrome Web Store Page</a> </li>
       </ul>
 
