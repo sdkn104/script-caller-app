@@ -1,6 +1,6 @@
 {
     "name": "Script Caller",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "manifest_version": 2,
     "description": "Customizable menu to call user scripts at browser and/or local PC.",
     "icons": {
