@@ -1,6 +1,6 @@
 
 {
-  // set links
+  // set link addresses
   document.getElementById("install_page1").href = chrome.runtime.getURL("install.html");
   document.getElementById("install_page2").href = chrome.runtime.getURL("install.html");
   document.getElementById("install_page3").href = chrome.runtime.getURL("install.html");

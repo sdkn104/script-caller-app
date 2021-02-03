@@ -4,36 +4,58 @@
 // load common parameters
 import {appName, storageKey} from "./common.js"
 
-// load data from local storage
+// load popup icon/menu data from local storage
 chrome.storage.local.get(storageKey, function(data){        
+    const content = document.getElementById("content");
+    const msg = document.getElementById("message");
+    const close = document.getElementById("close");
     // draw title
-    let title = data[storageKey].browserAction.title;
+    const title = data[storageKey].browserAction.title;
     document.getElementById("title").innerText = title;
+    // on click of close button
+    close.addEventListener("click", function(e){
+        window.close();
+    });
     // get url of current tab
-    chrome.tabs.executeScript({ // ! this generates error if the page is "chrome://*", etc.
+    chrome.tabs.executeScript({
         code: 'location.href'
     }, 
     function(results){
-        //alert(9999)
-        let url = results[0]
-        let content = document.getElementById("content")
+        if( chrome.runtime.lastError){ // error if the page is "chrome://*", etc.
+            console.log(chrome.runtime.lastError);
+            msg.innerHTML = chrome.runtime.lastError.message;
+            return;
+        }
+        const url = results[0];
         // draw menu items
-        let menu = data[storageKey].browserAction.menu;
+        const menu = data[storageKey].browserAction.menu;
         menu.forEach(function(m, idx) {
             if( !("matches" in m) || m.matches.some((p) => url.startsWith(p)) ) {
                 // add a button on popup menu
-                let inp = document.createElement("input")
+                const inp = document.createElement("input")
                 inp.type = "button"
                 inp.value = m.title;
                 inp.name = idx;
                 inp.onclick = function(evt){
-                    let i = evt.target.name;
-                    let message = {cmd:"click", idx:i}
-                    chrome.runtime.sendMessage(message);
-                    window.close();
+                    msg.innerHTML = "processing..."
+                    console.info("sending message...")
+                    const i = evt.target.name;
+                    const message = {cmd:"click", idx:i}
+                    chrome.runtime.sendMessage(message, function(res){
+                        console.info("message response:")
+                        console.log(res)
+                        if(res.error){
+                            msg.innerHTML = `Error in native or injection code:<br>${res.error}: ${res.message}`;
+                        } else {
+                            msg.innerHTML = "processing... finished."
+                            window.close();
+                        }
+                    });
+                    //window.close();
                 }
                 content.appendChild(inp)    
             }
         });
     });
+
 });

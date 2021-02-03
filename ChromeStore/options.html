@@ -1,19 +1,23 @@
 <!DOCTYPE html>
   <html>
   <body style="font-size: 12pt; max-width: 80ex;"></body>
-      <h1>Script Caller</h1>
+      <h2>Options Page of Chrome Extension [Script Caller]</h2>
+
+      <h3>Description</h3>
       <p>
-        This extension provides a customizable icon  and menu in Chrome toolbar 
-        to run user scripts at browser and/or at local PC.
+        This extension provides a customizable icon  and menu in Chrome toolbar, 
+        by which you can run your scripts on the browser and on the local PC.
       </p>
+      <h3>Installation</h3>
       <p>
-        This extension requires <b>native client</b> that is installed in local Windows PC.
-        (see <a id="install_page1" target="_blank">here</a>)
+        This extension requires installing <b>native client</b> in the local Windows PC.
+        <br>For more information, see <a id="install_page1" target="_blank">installation instruction</a>.
       </p>
 
-      <h2>How to setup menu and user scripts</h2>
+      <h3>How to setup menu and user scripts</h3>
       Menu specification file and script files should be stored 
-      in <a id="install_page2" target="_blank">native client</a> "host" folder in local PC as follows.
+      in native client "host" folder in local PC as follows.
+      The host folder path is shown by clicking check installation button in <a id="install_page2" target="_blank">installation inscruction page</a>.
       <ul>
         <li>
           Write specification of icon and menu in <code>customize/browserAction.json</code> file 
@@ -68,21 +72,21 @@
         <li>See example JSON file and script files in the native client "host" folder.</li>
       </ul>
 
-      <h2>Update Setup</h2>
+      <h3>Update Setup</h3>
       After modificaion of the above <code>customize/*</code> files, 
       click the following button to refresh setup.
       <br>
       <input id="setup" type="button" value="Update Setup">
   
 
-      <h2>Debug</h2>
-      To open the Chrome DevTools panel for the background script,
-      select the blue link of "background.html" next to Inspect views
-      in the Chrome extension management page.
-      Open Console tab to see log from this extension.
-      see <a href="https://developer.chrome.com/apps/tut_debugging">here.</a>
+      <h3>Debug</h3>
+      Select the blue link of "background.html" next to Inspect views
+      in the Chrome extension management page,
+      to open the Chrome DevTools panel for the background script.
+      Most of log messages from this extension appear in the Console tab.
+      See <a href="https://developer.chrome.com/apps/tut_debugging">here.</a>
 
-      <h2>Links</h2>
+      <h3>Links</h3>
       <ul>
         <li><a id="install_page3" target="_blank">Installation Instruction</a></li>
         <li><a id="store_page" target="_blank">Chrome Web Store Page</a> </li>
