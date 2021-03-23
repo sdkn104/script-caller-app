@@ -28,7 +28,7 @@ import {appName, storageKey} from "./common.js"
 
   // on click of check instalation button
   document.getElementById("check").addEventListener("click", function(e){
-    chrome.runtime.sendNativeMessage(appName, {cmd:"get-options"}, response => {
+    chrome.runtime.sendNativeMessage(appName, {cmd:"get-data"}, response => {
       console.info("response:");
       console.info(response);
       if (typeof response === "undefined") { // error occur in connecting to host

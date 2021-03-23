@@ -2,7 +2,7 @@
 // License: MIT 
 
 // import common parameters
-import {appName, storageKey} from "./common.js"
+import {appName, storageKey, sendMessageToNativeHost} from "./common.js"
 
 // on installation of this extension, setup browser action icon and menu
 chrome.runtime.onInstalled.addListener((details)=>{
@@ -28,41 +28,23 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 // setup browser action icon and menu
 function setupAll(details, successMessage = "") {
-    console.log("---- setup all ----")
-    // send message to native host to get all the data (browser icon and injection codes, etc.)
-    let message  = { cmd: "get-options" }
-    console.info("request to native host:")
-    console.log(message)
-    chrome.runtime.sendNativeMessage(appName, message, response => {
-        console.info("response from native host: ");
-        console.log(response);
-        if (typeof response === "undefined") { // error occur in connecting to host
-            // if native host not installed, show installation inscructions
-            if( chrome.runtime.lastError.message ){
-                alert("Error occurs in connecting to native client:\n"+chrome.runtime.lastError.message);
-            }
-            chrome.tabs.create({
-                url: chrome.runtime.getURL("install.html")
-            });
-        } else if( "error" in response ) { // error in native host
-            alert("ERROR in native host:\n" + JSON.stringify(response, ["error","message"], 4))
-        } else {
-            // if native host is installed, store get info to storage
-            const item = {
-                [storageKey] : response,
-            };
-            chrome.storage.local.set(item, function() {
-                console.log("saved to storage:")
-                console.log(item)
-                createBrowserActionIcon(successMessage)
-            });
-        }
+    sendMessageToNativeHost({cmd: "get-data"}, function(response){
+        // store get info to storage
+        const item = {
+            [storageKey] : response,
+        };
+        chrome.storage.local.set(item, function() {
+            console.log("saved to storage:")
+            console.log(item)
+            createBrowserActionIcon(successMessage)
+        });
     });
 }
 
 
 // setup browser action icon
 function createBrowserActionIcon(successMessage = "") {
+console.log("get message ")
     // load icon info from storage
     chrome.storage.local.get(storageKey, function(data){        
         console.info("load browser action icon data from local storage:")
@@ -100,7 +82,8 @@ function actionForClickMenuItem(message, sendResponse) {
     // load injection code from local storage
     chrome.storage.local.get(storageKey, function(storageData){
         // execute injection code
-        let code = storageData[storageKey].injectionCode[message.idx]
+        console.log(storageData[storageKey].browserAction)
+        let code = storageData[storageKey].browserAction.menu[message.idx].injectionScript;
         if( code === undefined ) { code = "'no injection code';" }
         console.info("injection code to be executed:")
         console.info({code:code})
@@ -113,8 +96,8 @@ function actionForClickMenuItem(message, sendResponse) {
                 return;
             }
             // send message to native host to execute native code
-            let nativeScript = storageData[storageKey].browserAction.menu[message.idx].nativeScript
-            if( nativeScript ) { // if native script exists
+            let nativeScript = storageData[storageKey].browserAction.menu[message.idx].nativeScript;
+            if( ! /^\s*$/.test(nativeScript) ) { // if native script exists
                 let msg = {cmd:"click", idx:message.idx, injectionCodeResults:injectionCodeResults}
                 console.info("request to native host:")
                 console.log(msg)

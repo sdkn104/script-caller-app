@@ -30,7 +30,7 @@ chrome.storage.local.get(storageKey, function(data){
         // draw menu items
         const menu = data[storageKey].browserAction.menu;
         menu.forEach(function(m, idx) {
-            if( !("matches" in m) || m.matches.some((p) => url.startsWith(p)) ) {
+            if( !("matches" in m) || m.matches.split(",").some((p) => url.startsWith(p)) ) {
                 // add a button on popup menu
                 const inp = document.createElement("input")
                 inp.type = "button"

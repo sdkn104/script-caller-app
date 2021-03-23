@@ -1,6 +1,6 @@
 {
     "name": "Script Caller",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "manifest_version": 2,
     "description": "Customizable menu to call user scripts at browser and/or local PC.",
     "icons": {
@@ -19,5 +19,7 @@
         "default_title": "Script Caller",
         "default_popup": "popup.html"
     },
-    "options_page": "options.html"
+    "options_page": "options.html",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
+
